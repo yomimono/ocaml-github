@@ -23,7 +23,7 @@ module Make(Time : Github_s.Time)(CL : Cohttp_lwt.Client) = struct
   exception Message of Cohttp.Code.status_code * Github_t.message
 
   let log_active =
-    ref (try Unix.getenv "GITHUB_DEBUG" <> "0" with _ -> false)
+    ref (* (try Unix.getenv "GITHUB_DEBUG" <> "0" with _ -> false) *) true
 
   let log fmt =
     Printf.ksprintf (fun s ->
@@ -447,7 +447,7 @@ module Make(Time : Github_s.Time)(CL : Cohttp_lwt.Client) = struct
     let update_poll_after uri { C.Response.headers } =
       let now = Time.now () in
       let poll_limit = match C.Header.get headers "x-poll-interval" with
-        | Some interval -> now +. (float_of_string interval)
+        | Some interval -> now +. (float_of_int (int_of_string interval))
         | None -> now +. 60.
       in
       let uri_s = Uri.to_string uri in
@@ -611,7 +611,7 @@ module Make(Time : Github_s.Time)(CL : Cohttp_lwt.Client) = struct
         in
         let rate_limit = int_of_string limit_s in
         let rate_remaining = int_of_string remaining_s in
-        let rate_reset = float_of_string reset_s in
+        let rate_reset = float_of_int (int_of_string reset_s) in
         let new_rate =
           Some { Github_t.rate_limit; rate_remaining; rate_reset }
         in
