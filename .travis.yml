@@ -1,20 +1,22 @@
 language: c
-sudo: false
+install: wget https://raw.githubusercontent.com/ocaml/ocaml-ci-scripts/master/.travis-docker.sh
+script: bash -ex .travis-docker.sh
 services:
-  - docker
-install: wget https://raw.githubusercontent.com/ocaml/ocaml-travisci-skeleton/master/.travis-docker.sh
-script: bash ./.travis-docker.sh
+- docker
 env:
- global:
-   - PINS="github:. github-unix:. github-jsoo:."
-   - DEPOPTS="github-unix github-jsoo"
- matrix:
-   - DISTRO=debian-stable OCAML_VERSION=4.06.0 PACKAGE="github" REVDEPS=true
-   - DISTRO=debian-testing OCAML_VERSION=4.06.0 PACKAGE="github-unix" REVDEPS=true
-   - DISTRO=debian-unstable OCAML_VERSION=4.04.0 PACKAGE="github-unix"
-   - DISTRO=ubuntu-12.04 OCAML_VERSION=4.04.2 PACKAGE="github-unix"
-   - DISTRO=ubuntu-16.04 OCAML_VERSION=4.03.0 PACKAGE="github-unix"
-   - DISTRO=centos-6 OCAML_VERSION=4.04.2 PACKAGE="github-unix"
-   - DISTRO=centos-7 OCAML_VERSION=4.04.2 PACKAGE="github-unix"
-   - DISTRO=fedora-25 OCAML_VERSION=4.04.2 PACKAGE="github-unix"
-   - DISTRO=alpine OCAML_VERSION=4.03.0 PACKAGE="github-unix"
+  global:
+  - PINS="github-unix:. github-jsoo:. github:."
+  - DISTRO="debian-stable"
+  matrix:
+  - PACKAGE="github-unix" OCAML_VERSION="4.03.0"
+  - PACKAGE="github-unix" OCAML_VERSION="4.04.2"
+  - PACKAGE="github-unix" OCAML_VERSION="4.05.0"
+  - PACKAGE="github-unix" OCAML_VERSION="4.06.0"
+  - PACKAGE="github-jsoo" OCAML_VERSION="4.03.0"
+  - PACKAGE="github-jsoo" OCAML_VERSION="4.04.2"
+  - PACKAGE="github-jsoo" OCAML_VERSION="4.05.0"
+  - PACKAGE="github-jsoo" OCAML_VERSION="4.06.0"
+  - PACKAGE="github" OCAML_VERSION="4.03.0"
+  - PACKAGE="github" OCAML_VERSION="4.04.2"
+  - PACKAGE="github" OCAML_VERSION="4.05.0"
+  - PACKAGE="github" OCAML_VERSION="4.06.0"
